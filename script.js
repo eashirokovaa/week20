@@ -45,14 +45,26 @@ function saveRates() {
   for (let name of names) {
     storageName.push(name.innerHTML);
   }
-  let rates = document.querySelectorAll("input")
+  let rates = document.querySelectorAll("input");
   let storageRates = [];
   for (let rate of rates) {
-    storageRates.push(rate.value + "/5")
+    storageRates.push(rate.value + "/5");
   }
   storageFinal = [];
-  for(let i = 0; i < storageName.length; i++ ){
+  for (let i = 0; i < storageName.length; i++) {
     storageFinal.push(storageName[i] + ":" + " " + storageRates[i]);
   }
-  localStorage.setItem('rates', storageFinal)
+  localStorage.setItem("rates", JSON.stringify(storageFinal));
 }
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  fetch(
+    "https://api.nasa.gov/planetary/apod?api_key=7PnWdota9yISArhiV5f4T0bUHKsoVhOux8WVcFKc"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("picture").src = data.url;
+      document.querySelector(".explanation").innerHTML = data.explanation;
+    })
+    .catch((err) => console.log(err));
+});
